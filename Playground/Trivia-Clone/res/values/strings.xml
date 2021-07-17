@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Trivia Clone</string>
+    <string name="correct_answer">Correct</string>
+    <string name="incorrect_answer">Incorrect</string>
+</resources>
