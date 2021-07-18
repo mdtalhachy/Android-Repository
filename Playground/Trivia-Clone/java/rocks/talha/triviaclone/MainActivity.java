@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(answer == userChose){
             snackMsgID = R.string.correct_answer;
+            fadeAnimation();
         }else{
             snackMsgID = R.string.incorrect_answer;
             shakeAnimation();
@@ -83,6 +85,32 @@ public class MainActivity extends AppCompatActivity {
     public void updateQuestion(List<Question> qAList){
         binding.questionTextView.setText(qAList.get(currentQuestionIndex).getAnswer());
         updateCounter();
+    }
+
+    private void fadeAnimation(){
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+        alphaAnimation.setDuration(300);
+        alphaAnimation.setRepeatCount(1);
+        alphaAnimation.setRepeatMode(Animation.REVERSE);
+
+        binding.questionCardView.setAnimation(alphaAnimation);
+
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                binding.questionTextView.setTextColor(Color.GREEN);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                binding.questionTextView.setTextColor(Color.WHITE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     public void shakeAnimation(){
