@@ -44,13 +44,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //sharedPref work
-        prefs = new Prefs(MainActivity.this);
-        Log.d("scoreStart", "onCreate: " + prefs.getHighestScore());
-
-
         score_new = new Score();
+        prefs = new Prefs(MainActivity.this);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        binding.highscoreTextView.setText("Highest: " + prefs.getHighestScore());
 
 
         questionsList = new Repository().getQuestions(questionArrayList -> {
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         binding.falseButton.setOnClickListener(view -> {
             checkAnswer(false);
             updateQuestion(questionsList);
-            Log.d("lol", "onCreate: " + currentQuestionIndex);
+            //Log.d("lol", "onCreate: " + currentQuestionIndex);
         });
 
     }
@@ -89,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
             snackMsgID = R.string.correct_answer;
             addPoints();
             binding.newscoreTextView.setText("Current Score: " + scoreCounter);
-            updateHighScore(scoreCounter);
             fadeAnimation();
         }else{
             snackMsgID = R.string.incorrect_answer;
             deductPoints();
+            binding.newscoreTextView.setText("Current Score: " + scoreCounter);
             shakeAnimation();
         }
 
@@ -159,14 +158,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public int updateHighScore(int newScore){
-        if(newScore > prevHighScore){
-            prevHighScore = newScore;
-            binding.highscoreTextView.setText("Highest Score: " + prevHighScore);
-        }
-
-        return prevHighScore;
-    }
 
     public void addPoints(){
         scoreCounter += 10;
@@ -174,9 +165,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deductPoints(){
-        scoreCounter -= 5;
 
         if(scoreCounter >= 5){
+            scoreCounter -= 5;
             score_new.setScore(scoreCounter);
         }else {
             scoreCounter = 0;
@@ -184,4 +175,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        prefs.savedHighestScore(score_new.getScore());
+        super.onPause();
+    }
 }
