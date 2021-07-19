@@ -18,6 +18,8 @@ import java.util.List;
 import rocks.talha.triviaclone.data.Repository;
 import rocks.talha.triviaclone.databinding.ActivityMainBinding;
 import rocks.talha.triviaclone.model.Question;
+import rocks.talha.triviaclone.model.Score;
+import rocks.talha.triviaclone.model.util.Prefs;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,10 +30,25 @@ public class MainActivity extends AppCompatActivity {
     private int currentQuestionIndex = 0;
     List<Question> questionsList;
 
+    private int prevHighScore = 0;
+    private int scoreCounter = 0;
+
+    private Score score_new;
+
+    Prefs prefs;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //sharedPref work
+        prefs = new Prefs(MainActivity.this);
+        Log.d("scoreStart", "onCreate: " + prefs.getHighestScore());
+
+
+        score_new = new Score();
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
@@ -47,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         binding.nextButton.setOnClickListener(view -> {
             currentQuestionIndex = (currentQuestionIndex + 1) % questionsList.size();
             updateQuestion(questionsList);
+            prefs.savedHighestScore(scoreCounter);
+            Log.d("score", "onCreate: " + prefs.getHighestScore());
         });
 
         binding.trueButton.setOnClickListener(view -> {
@@ -68,9 +87,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(answer == userChose){
             snackMsgID = R.string.correct_answer;
+            addPoints();
+            binding.newscoreTextView.setText("Current Score: " + scoreCounter);
+            updateHighScore(scoreCounter);
             fadeAnimation();
         }else{
             snackMsgID = R.string.incorrect_answer;
+            deductPoints();
             shakeAnimation();
         }
 
@@ -103,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                binding.questionTextView.setTextColor(Color.WHITE);
+                binding.questionTextView.setTextColor(Color.BLACK);
             }
 
             @Override
@@ -126,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                binding.questionTextView.setTextColor(Color.WHITE);
+                binding.questionTextView.setTextColor(Color.BLACK);
             }
 
             @Override
@@ -135,4 +158,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public int updateHighScore(int newScore){
+        if(newScore > prevHighScore){
+            prevHighScore = newScore;
+            binding.highscoreTextView.setText("Highest Score: " + prevHighScore);
+        }
+
+        return prevHighScore;
+    }
+
+    public void addPoints(){
+        scoreCounter += 10;
+        score_new.setScore(scoreCounter);
+    }
+
+    public void deductPoints(){
+        scoreCounter -= 5;
+
+        if(scoreCounter >= 5){
+            score_new.setScore(scoreCounter);
+        }else {
+            scoreCounter = 0;
+            score_new.setScore(scoreCounter);
+        }
+    }
+
 }
