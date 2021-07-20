@@ -24,4 +24,12 @@ public class Prefs {
         return preferences.getInt("high_score_key", 0);
     }
 
+    public void setState(int index){
+        preferences.edit().putInt("state", index).apply();
+    }
+
+    public int getState(){
+        return preferences.getInt("state", 0);
+    }
+
 }
