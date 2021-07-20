@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rocks.talha.triviaclone.data.Repository;
@@ -28,29 +29,28 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private int currentQuestionIndex = 0;
-    List<Question> questionsList;
-
-    private int prevHighScore = 0;
     private int scoreCounter = 0;
-
     private Score score_new;
 
-    Prefs prefs;
+    private Prefs prefs;
 
+    List<Question> questionsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
         //sharedPref work
         score_new = new Score();
         prefs = new Prefs(MainActivity.this);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
         binding.highscoreTextView.setText("Highest: " + prefs.getHighestScore());
 
+        //retrieving current state
+        currentQuestionIndex = prefs.getState();
 
         questionsList = new Repository().getQuestions(questionArrayList -> {
             binding.questionTextView.setText(questionArrayList.get(currentQuestionIndex)
@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding.nextButton.setOnClickListener(view -> {
             getNextQuestion();
-            prefs.savedHighestScore(scoreCounter);
         });
 
         binding.trueButton.setOnClickListener(view -> {
@@ -163,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     public void addPoints(){
         scoreCounter += 10;
         score_new.setScore(scoreCounter);
@@ -183,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         prefs.savedHighestScore(score_new.getScore());
+        prefs.setState(currentQuestionIndex);
+        Log.d("State", "onPause: " + prefs.getState());
         super.onPause();
     }
 }
