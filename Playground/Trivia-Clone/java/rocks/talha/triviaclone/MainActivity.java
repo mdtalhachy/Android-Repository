@@ -61,10 +61,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.nextButton.setOnClickListener(view -> {
-            currentQuestionIndex = (currentQuestionIndex + 1) % questionsList.size();
-            updateQuestion(questionsList);
+            getNextQuestion();
             prefs.savedHighestScore(scoreCounter);
-            Log.d("score", "onCreate: " + prefs.getHighestScore());
         });
 
         binding.trueButton.setOnClickListener(view -> {
@@ -78,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
             //Log.d("lol", "onCreate: " + currentQuestionIndex);
         });
 
+    }
+
+    private void getNextQuestion() {
+        currentQuestionIndex = (currentQuestionIndex + 1) % questionsList.size();
+        updateQuestion(questionsList);
     }
 
     private void checkAnswer(boolean userChose) {
@@ -126,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 binding.questionTextView.setTextColor(Color.BLACK);
+                getNextQuestion();
             }
 
             @Override
@@ -149,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 binding.questionTextView.setTextColor(Color.BLACK);
+                getNextQuestion();
             }
 
             @Override
