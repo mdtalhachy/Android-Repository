@@ -1,14 +1,14 @@
 package rocks.talha.contactmanager.model;
 
-public class Question {
+public class Contact {
     private int id;
     private String name;
     private String phoneNumber;
 
-    public Question() {
+    public Contact() {
     }
 
-    public Question(int id, String name, String phoneNumber) {
+    public Contact(int id, String name, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
