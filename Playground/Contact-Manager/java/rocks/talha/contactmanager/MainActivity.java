@@ -39,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
         c.setName("Bollov");
         c.setPhoneNumber("0155500");
 
-        int updatedRow = db.updateContact(c);
-        Log.d("updates", "onCreate: " + updatedRow);
+        /*int updatedRow = db.updateContact(c);
+        Log.d("updates", "onCreate: " + updatedRow);*/
+
+        /* testing deleteContact */
+        db.deleteContact(c);
 
         //get all contacts
         List<Contact> contactList = db.getAllContacts();
