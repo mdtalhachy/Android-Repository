@@ -19,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseHandler db = new DatabaseHandler(MainActivity.this);
 
+        //testing getCount()
+        //getting the total number of contacts
+        Log.d("Count", "onCreate: " + db.getCount());
+
         Contact mahony = new Contact();
         mahony.setName("Mahony");
         mahony.setPhoneNumber("01755669988");
