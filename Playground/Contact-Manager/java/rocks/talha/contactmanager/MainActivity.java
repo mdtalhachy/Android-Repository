@@ -27,9 +27,15 @@ public class MainActivity extends AppCompatActivity {
         megh.setName("Megh");
         megh.setPhoneNumber("3231213232");
 
-        db.addContact(mahony);
-        db.addContact(megh);
-
+        //db.addContact(mahony);
+        //db.addContact(megh);
+        
+        
+        //Get one contact
+        Contact c = db.getContact(3);
+        Log.d("ContactC", "onCreate: " + c.getName() + ", " + c.getPhoneNumber());
+        
+        //get all contacts
         List<Contact> contactList = db.getAllContacts();
         for(Contact contact: contactList){
             Log.d("ContactI", "onCreate: " + contact.getPhoneNumber());
