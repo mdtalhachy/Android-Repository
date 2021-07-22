@@ -29,12 +29,19 @@ public class MainActivity extends AppCompatActivity {
 
         //db.addContact(mahony);
         //db.addContact(megh);
-        
-        
+
+
         //Get one contact
         Contact c = db.getContact(3);
         Log.d("ContactC", "onCreate: " + c.getName() + ", " + c.getPhoneNumber());
-        
+
+        //Updating contact test
+        c.setName("Bollov");
+        c.setPhoneNumber("0155500");
+
+        int updatedRow = db.updateContact(c);
+        Log.d("updates", "onCreate: " + updatedRow);
+
         //get all contacts
         List<Contact> contactList = db.getAllContacts();
         for(Contact contact: contactList){
