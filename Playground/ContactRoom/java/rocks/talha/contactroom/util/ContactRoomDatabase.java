@@ -2,9 +2,11 @@ package rocks.talha.contactroom.util;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,11 +32,31 @@ public abstract class ContactRoomDatabase extends RoomDatabase {
             synchronized (ContactRoomDatabase.class){
                 if(INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            ContactRoomDatabase.class, "contact_database").build();
+                            ContactRoomDatabase.class, "contact_database")
+                            .addCallback(sRoomDatabaseCallback).build();
                 }
             }
         }
 
         return INSTANCE;
     }
+
+    public static final RoomDatabase.Callback sRoomDatabaseCallback =
+            new RoomDatabase.Callback() {
+                @Override
+                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                    super.onCreate(db);
+
+                    databaseWriteExecutor.execute(() ->{
+                        ContactDao contactDao = INSTANCE.contactDao();
+                        contactDao.deleteAll();
+
+                        Contact contact = new Contact("Talha", "Developer");
+                        contactDao.insert(contact);
+
+                        contact = new Contact("Bond", "Spy");
+                        contactDao.insert(contact);
+                    });
+                }
+            };
 }
