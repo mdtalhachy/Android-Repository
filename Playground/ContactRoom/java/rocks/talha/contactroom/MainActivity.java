@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,13 +18,13 @@ import rocks.talha.contactroom.model.ContactViewModel;
 public class MainActivity extends AppCompatActivity {
 
     private ContactViewModel contactViewModel;
-    private TextView textView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = findViewById(R.id.textView);
+
 
         contactViewModel = new ViewModelProvider.AndroidViewModelFactory(MainActivity.this
                 .getApplication())
@@ -39,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("CTEST", "onChanged: " + contact.getName());
                 }
 
-                textView.setText(builder.toString());
             }
         });
     }
