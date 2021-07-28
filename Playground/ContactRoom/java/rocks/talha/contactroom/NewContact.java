@@ -3,6 +3,7 @@ package rocks.talha.contactroom;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +16,8 @@ import rocks.talha.contactroom.model.ContactViewModel;
 
 public class NewContact extends AppCompatActivity {
 
+    public static final String NAME_KEY = "name_key";
+    public static final String OCCU_KEY = "occu_key";
     private EditText enterName;
     private EditText enterOccupation;
     private Button saveButton;
@@ -35,14 +38,23 @@ public class NewContact extends AppCompatActivity {
         saveButton = findViewById(R.id.save_button);
 
         saveButton.setOnClickListener(view -> {
-            if(!TextUtils.isEmpty(enterName.getText()) && !TextUtils.isEmpty(enterOccupation.getText())){
-                Contact contact = new Contact(enterName.getText().toString(),
-                        enterOccupation.getText().toString());
 
-                ContactViewModel.insert(contact);
+            Intent replyIntent = new Intent();
+
+            if(!TextUtils.isEmpty(enterName.getText()) && !TextUtils.isEmpty(enterOccupation.getText())){
+
+                String name = enterName.getText().toString();
+                String occupation = enterOccupation.getText().toString();
+
+                replyIntent.putExtra(NAME_KEY, name);
+                replyIntent.putExtra(OCCU_KEY, occupation);
+
+                setResult(RESULT_OK, replyIntent);
             }else{
-                Toast.makeText(this, "Enter Information", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED, replyIntent);
             }
+
+            finish();
         });
     }
 }
