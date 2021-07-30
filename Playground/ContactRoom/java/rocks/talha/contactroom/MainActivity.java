@@ -48,19 +48,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                 .create(ContactViewModel.class);
 
 
-        contactViewModel.getAllContacts().observe(this, new Observer<List<Contact>>() {
-            @Override
-            public void onChanged(List<Contact> contacts) {
+        contactViewModel.getAllContacts().observe(this, contacts -> {
 
-                //setup adapter
-                recyclerViewAdapter = new RecyclerViewAdapter(contacts, MainActivity.this);
+            //setup adapter
+            recyclerViewAdapter = new RecyclerViewAdapter(contacts, MainActivity.this, this);
 
-                //setting adapter to recyclerView
-                //It's important that we set adapter inside observer cause all the changes happen
-                //inside Observe
-                recyclerView.setAdapter(recyclerViewAdapter);
-
-            }
+            //setting adapter to recyclerView
+            //It's important that we set adapter inside observer cause all the changes happen
+            //inside Observe
+            recyclerView.setAdapter(recyclerViewAdapter);
         });
 
 
@@ -92,6 +88,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     public void onContactClick(int position) {
-
+        Log.d("Blink", "onContactClick: " + position);
     }
 }
