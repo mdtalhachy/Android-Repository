@@ -20,7 +20,7 @@ import rocks.talha.contactroom.adapter.RecyclerViewAdapter;
 import rocks.talha.contactroom.model.Contact;
 import rocks.talha.contactroom.model.ContactViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnContactClickListener{
 
     public static final int NEW_CONTACT_ACTIViTY_REQ_CODE = 1;
     private ContactViewModel contactViewModel;
@@ -87,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
 
             ContactViewModel.insert(contact);
         }
+
+    }
+
+    @Override
+    public void onContactClick(int position) {
 
     }
 }
