@@ -1,7 +1,7 @@
-
 package rocks.talha.contactroom.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +51,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return contactList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView name;
         public TextView occupation;
 
@@ -60,6 +60,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             name = (TextView) itemView.findViewById(R.id.name_textView);
             occupation = (TextView) itemView.findViewById(R.id.occupation_textView);
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            Log.d("Clicked", "onClick: Inside");
+        }
+    }
+
+    public interface OnContactClickListener{
+        void onContactClick(int position);
     }
 }
