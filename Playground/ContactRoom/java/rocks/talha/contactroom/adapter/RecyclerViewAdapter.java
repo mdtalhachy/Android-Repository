@@ -20,12 +20,14 @@ import rocks.talha.contactroom.model.Contact;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
+    OnContactClickListener contactClickListener;
     private List<Contact> contactList;
     private Context context;
 
-    public RecyclerViewAdapter(List<Contact> contactList, Context context) {
+    public RecyclerViewAdapter(List<Contact> contactList, Context context, OnContactClickListener onContactClickListener) {
         this.contactList = contactList;
         this.context = context;
+        this.contactClickListener = onContactClickListener;
     }
 
     @NonNull
@@ -36,7 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.contact_row, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, contactClickListener);
     }
 
     @Override
@@ -52,21 +54,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        OnContactClickListener onContactClickListener;
         public TextView name;
         public TextView occupation;
 
-        public ViewHolder(@NonNull @NotNull View itemView) {
+        public ViewHolder(@NonNull @NotNull View itemView, OnContactClickListener onContactClickListener) {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.name_textView);
             occupation = (TextView) itemView.findViewById(R.id.occupation_textView);
+            this.onContactClickListener = onContactClickListener;
 
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            Log.d("Clicked", "onClick: Inside");
+            onContactClickListener.onContactClick(getAdapterPosition());
         }
     }
 
