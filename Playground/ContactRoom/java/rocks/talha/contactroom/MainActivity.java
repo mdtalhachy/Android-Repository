@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     public void onContactClick(int position) {
-        Log.d("Blink", "onContactClick: " + position);
+        Contact contact = contactViewModel.allContacts.getValue().get(position);
+        Log.d("Link", "onContactClick: " + contact.getName());
     }
 }
