@@ -30,4 +30,16 @@ public class ContactRepository {
         });
     }
 
+    public LiveData<Contact> get(int id){
+        return contactDao.get(id);
+    }
+
+    public void update(Contact contact){
+        //putting the task in the background
+        ContactRoomDatabase.databaseWriteExecutor.execute(() -> contactDao.update(contact));
+    }
+
+    public void delete(Contact contact){
+        ContactRoomDatabase.databaseWriteExecutor.execute(() -> contactDao.delete(contact));
+    }
 }
