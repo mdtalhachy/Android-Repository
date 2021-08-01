@@ -7,8 +7,9 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity
+@Entity(tableName = "task_table")
 public class Task {
+
     @ColumnInfo(name = "task_id")
     @PrimaryKey(autoGenerate = true)
     public long taskId;
