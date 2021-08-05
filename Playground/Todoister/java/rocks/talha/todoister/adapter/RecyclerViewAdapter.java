@@ -15,6 +15,7 @@ import java.util.List;
 
 import rocks.talha.todoister.R;
 import rocks.talha.todoister.model.Task;
+import rocks.talha.todoister.util.Utils;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -35,7 +36,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
 
         Task task = allTasks.get(position);
+
+        String formatted = Utils.formatDate(task.dueDate);
+
         holder.task.setText(task.getTask());
+        holder.todayChip.setText(formatted);
 
     }
 
@@ -54,7 +59,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             radioButton = itemView.findViewById(R.id.todo_radio_button);
             task = itemView.findViewById(R.id.todo_row_todo);
-            todayChip = itemView.findViewById(R.id.today_chip);
+            todayChip = itemView.findViewById(R.id.todo_row_chip);
         }
     }
 }
