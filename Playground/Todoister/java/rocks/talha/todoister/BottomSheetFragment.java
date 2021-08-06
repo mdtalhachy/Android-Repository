@@ -2,6 +2,7 @@ package rocks.talha.todoister;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,12 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             calenderGroup.setVisibility(
                     calenderGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE
             );
+        });
+
+        /* Exporting date from calendarView */
+        calendarView.setOnDateChangeListener((calendarView, year, month, dayOfMonth) -> {
+            /* month + 1 because calendar months start at 0 */
+            Log.d("ShowDate", "onViewCreated: " + "Month " + (month + 1) + " Date " + dayOfMonth);
         });
 
         saveButton.setOnClickListener(view1 -> {
