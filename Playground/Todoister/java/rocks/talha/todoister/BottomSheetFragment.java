@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
 
@@ -39,6 +40,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     private ImageButton saveButton;
     private CalendarView calendarView;
     private Group calenderGroup;
+    private Date dueDate;
+
+    /* to extract date format */
+    Calendar calendar = Calendar.getInstance();
 
     public BottomSheetFragment() {
 
@@ -81,14 +86,20 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         /* Exporting date from calendarView */
         calendarView.setOnDateChangeListener((calendarView, year, month, dayOfMonth) -> {
             /* month + 1 because calendar months start at 0 */
-            Log.d("ShowDate", "onViewCreated: " + "Month " + (month + 1) + " Date " + dayOfMonth);
+            //Log.d("ShowDate", "onViewCreated: " + "Month " + (month + 1) + " Date " + dayOfMonth);
+
+            calendar.clear();
+            calendar.set(year, month, dayOfMonth);
+            dueDate = calendar.getTime();
+
+
         });
 
         saveButton.setOnClickListener(view1 -> {
             String task = enterTodo.getText().toString().trim();
-            if(!TextUtils.isEmpty(task)){
+            if(!TextUtils.isEmpty(task) && dueDate != null){
                 Task myTask = new Task(task, Priority.HIGH,
-                        Calendar.getInstance().getTime(), Calendar.getInstance().getTime(),
+                        Calendar.getInstance().getTime(), dueDate,
                         false);
                 TaskViewModel.insert(myTask);
             }
