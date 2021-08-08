@@ -1,5 +1,6 @@
 package rocks.talha.todoister;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.RadioGroup;
 
 import rocks.talha.todoister.R;
 import rocks.talha.todoister.model.Priority;
+import rocks.talha.todoister.model.SharedViewModel;
 import rocks.talha.todoister.model.Task;
 import rocks.talha.todoister.model.TaskViewModel;
 
@@ -24,6 +26,7 @@ import com.google.android.material.chip.Chip;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.Calendar;
@@ -41,6 +44,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
     private CalendarView calendarView;
     private Group calenderGroup;
     private Date dueDate;
+    private SharedViewModel sharedViewModel;
 
     /* to extract date format */
     Calendar calendar = Calendar.getInstance();
@@ -80,6 +84,15 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        /* passing data from select item to bottom sheet */
+        sharedViewModel = new ViewModelProvider(requireActivity())
+                .get(SharedViewModel.class);
+
+        if(sharedViewModel.getSelectedItem().getValue() != null){
+            Task task = sharedViewModel.getSelectedItem().getValue();
+            Log.d("MY", "onViewCreated: " + task.getTask());
+        }
 
         calendarButton.setOnClickListener(view12 -> {
             calenderGroup.setVisibility(
