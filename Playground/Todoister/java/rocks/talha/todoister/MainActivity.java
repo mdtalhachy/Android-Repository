@@ -108,7 +108,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
     /* setting up onClick event on task row */
     @Override
     public void onTodoClick(Task task) {
+
         sharedViewModel.selectItem(task);
+        sharedViewModel.setIsEdit(true);
+
+        /* popup bottom sheet dialog */
         showBottomSheetDialog();
 
         //Log.d("AdapClick", "onTodoClick: " + task.getTask());
