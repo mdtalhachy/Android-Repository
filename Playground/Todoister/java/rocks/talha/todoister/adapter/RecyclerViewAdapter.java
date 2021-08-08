@@ -69,15 +69,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             /* setting up onClick event on task row */
             this.onTodoClickListener = todoClickListener;
             itemView.setOnClickListener(this);
+
+            /* setting up delete functionality */
+            radioButton.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             /* setting up onClick event on task row */
+            Task currTask = allTasks.get(getAdapterPosition());
+
             int id = view.getId();
             if(id == R.id.todo_row_layout){
-                Task currTask = allTasks.get(getAdapterPosition());
                 onTodoClickListener.onTodoClick(getAdapterPosition(), currTask);
+            }else{
+                /* setting up delete functionality */
+                onTodoClickListener.onTodoRadioButtonClick(currTask);
             }
         }
     }
