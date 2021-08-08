@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import rocks.talha.todoister.adapter.OnTodoClickListener;
 import rocks.talha.todoister.adapter.RecyclerViewAdapter;
+import rocks.talha.todoister.model.SharedViewModel;
 import rocks.talha.todoister.model.Task;
 import rocks.talha.todoister.model.TaskViewModel;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
     BottomSheetFragment bottomSheetFragment;
+    private SharedViewModel sharedViewModel;
 
     int counter;
 
@@ -56,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
 
         taskViewModel = new ViewModelProvider.AndroidViewModelFactory(MainActivity.this.getApplication())
                 .create(TaskViewModel.class);
+
+        /* Intantiating SharedViewModel */
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         taskViewModel.getAllTasks().observe(this, tasks -> {
             recyclerViewAdapter = new RecyclerViewAdapter(tasks, this);
@@ -102,13 +107,16 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
 
     /* setting up onClick event on task row */
     @Override
-    public void onTodoClick(int adapterPosition, Task task) {
-        Log.d("AdapClick", "onTodoClick: " + task.getTask());
+    public void onTodoClick(Task task) {
+        sharedViewModel.selectItem(task);
+        showBottomSheetDialog();
+
+        //Log.d("AdapClick", "onTodoClick: " + task.getTask());
     }
 
     @Override
     public void onTodoRadioButtonClick(Task task) {
-        
+
         /* Making confirmation dialog popup */
         Context context;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
