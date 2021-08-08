@@ -1,5 +1,8 @@
 package rocks.talha.todoister;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import rocks.talha.todoister.adapter.OnTodoClickListener;
@@ -105,7 +108,28 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
 
     @Override
     public void onTodoRadioButtonClick(Task task) {
-        TaskViewModel.delete(task);
-        recyclerViewAdapter.notifyDataSetChanged();
+        
+        /* Making confirmation dialog popup */
+        Context context;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm Delete");
+        builder.setMessage("Are you sure?");
+
+        builder.setPositiveButton("YES", (dialogInterface, i) -> {
+            TaskViewModel.delete(task);
+            recyclerViewAdapter.notifyDataSetChanged();
+            dialogInterface.dismiss();
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                /* do nothing */
+                dialogInterface.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
