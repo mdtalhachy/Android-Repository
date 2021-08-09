@@ -19,9 +19,11 @@ import rocks.talha.todoister.model.Priority;
 import rocks.talha.todoister.model.SharedViewModel;
 import rocks.talha.todoister.model.Task;
 import rocks.talha.todoister.model.TaskViewModel;
+import rocks.talha.todoister.util.Utils;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
@@ -105,8 +107,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
 
         calendarButton.setOnClickListener(view12 -> {
             calenderGroup.setVisibility(
-                    calenderGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE
-            );
+                    calenderGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+
+            Utils.hideSoftKeyboard(view12);
         });
 
         /* Exporting date from calendarView */
@@ -123,6 +126,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
 
         saveButton.setOnClickListener(view1 -> {
             String task = enterTodo.getText().toString().trim();
+
             if(!TextUtils.isEmpty(task) && dueDate != null){
                 Task myTask = new Task(task, Priority.HIGH,
                         Calendar.getInstance().getTime(), dueDate,
@@ -144,6 +148,17 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
                     TaskViewModel.insert(myTask);
                 }
 
+                /* setting text field to empty after saving */
+                enterTodo.setText("");
+
+                /* closing bottom sheet once saved */
+                if(this.isVisible()){
+                    this.dismiss();
+                }
+
+            }else{
+                Snackbar.make(saveButton, "Empty Field", Snackbar.LENGTH_LONG)
+                        .show();
             }
         });
     }
